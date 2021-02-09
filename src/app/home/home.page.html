@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title slot="primary">
+       California Boxing club
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="ion-padding">
+    <ion-list>
+      <ion-item *ngFor="let fighter of fighters" (click)="fighterTapped(fighter)">
+        <ion-thumbnail slot="start">
+          <img src="{{fighter.image}}">
+        </ion-thumbnail>
+        <ion-label> {{fighter.name}} <br> {{fighter.record}} </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+<ion-toolbar>
+  <img src="/assets/images/boxing.jpg" />
+  <ion-title slot="primary">
+    Julen Junguitu
+  </ion-title>
+</ion-toolbar>
