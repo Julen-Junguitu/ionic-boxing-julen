@@ -60,13 +60,5 @@ export class CreatePage implements OnInit {
     toast.present();
   }
 
-  saveFighter() {
-    this.fighter = this.fighterForm.value;
-    let nextKey = this.id;
-    let num = Number.parseInt(nextKey);
-    let numId = num+1
-    this.fighter.id = numId.toString();
-    this.fightercrudService.setItem(this.fighter.id, this.fighter );
-    console.warn(this.fighterForm.value);
-    }
+  
 }
