@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FighterdbserviceService } from '../core/fighterdbservice.service';
 import { IFighter } from '../share/interfaces';
 import { ToastController } from '@ionic/angular';
+import { FightercrudService } from '../core/fightercrud.service';
+
 
 @Component({
   selector: 'app-details',
@@ -12,20 +14,41 @@ import { ToastController } from '@ionic/angular';
 export class DetailsPage implements OnInit {
 
   id: string;
-  public fighter: IFighter;
+
+  fighter: any;
 
   constructor(
     private activatedrouter: ActivatedRoute,
     private router: Router,
-    private fighterdbService: FighterdbserviceService,
+    private fightercrudService: FightercrudService,
     public toastController: ToastController
   ) { }
   
   ngOnInit() {
     this.id = this.activatedrouter.snapshot.params.id;
-    this.fighterdbService.getItem(this.id).then(
-      (data: IFighter) => this.fighter = data
-    );
+    this.fightercrudService.read_Fighters().subscribe(data => {
+      let fighters = data.map(e => {
+
+
+        return {
+          id: e.payload.doc.id,
+          isEdit: false,
+          name: e.payload.doc.data()['name'],
+          record: e.payload.doc.data()['record'],
+          yearOfBirth: e.payload.doc.data()['yearOfBirth'],
+          country: e.payload.doc.data()['country'],
+          image: e.payload.doc.data()['image']
+        };
+      })
+
+      fighters.forEach(element => {
+        if(element.id == this.id){
+          this.fighter = element;
+        }
+      });
+
+      console.log(this.fighter);
+    });
   }
 
   editRecord(fighter) {
@@ -41,7 +64,7 @@ export class DetailsPage implements OnInit {
           icon: 'delete',
           text: 'ACEPTAR',
           handler: () => {
-            this.fighterdbService.remove(id);
+            this.fightercrudService.delete_Fighter(id);
             this.router.navigate(['home']);
           }
         }, {

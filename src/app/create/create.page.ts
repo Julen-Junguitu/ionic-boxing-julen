@@ -4,6 +4,7 @@ import { FighterdbserviceService } from '../core/fighterdbservice.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { IFighter } from '../share/interfaces';
+import { FightercrudService } from '../core/fightercrud.service';
 
 
 @Component({
@@ -14,19 +15,16 @@ import { IFighter } from '../share/interfaces';
 export class CreatePage implements OnInit {
 
   id: string;
-  fighter: IFighter;
+  fighter: any;
   fighterForm: FormGroup;
   constructor(
     private router: Router,
-    private fighterdbService: FighterdbserviceService,
+    private fightercrudService: FightercrudService,
     public toastController: ToastController
   ) { }
 
   ngOnInit() {
-    this.fighterdbService.getLength().then(
-      (data: Number) => {
-        this.id = data.toString();
-      })
+    
     this.fighterForm = new FormGroup({
       name: new FormControl(''),
       record: new FormControl(''),
@@ -46,7 +44,8 @@ export class CreatePage implements OnInit {
           icon: 'save',
           text: 'ACEPTAR',
           handler: () => {
-            this.saveFighter();
+            this.fighter = this.fighterForm.value;
+            this.fightercrudService.create_Fighter(this.fighter);
             this.router.navigate(['home']);
           }
         }, {
@@ -67,7 +66,7 @@ export class CreatePage implements OnInit {
     let num = Number.parseInt(nextKey);
     let numId = num+1
     this.fighter.id = numId.toString();
-    this.fighterdbService.setItem(this.fighter.id, this.fighter );
+    this.fightercrudService.setItem(this.fighter.id, this.fighter );
     console.warn(this.fighterForm.value);
     }
 }
